@@ -9,6 +9,8 @@ namespace SellerApiOzon.Services
         public string Dal_GetSkuFromOzon();
         public string Dal_GetRemainsForPrices();
         public void Dal_SaveSkuFromOzon(string skuList);
+        public string Dal_UpdateStockForOzon();
+
 
     }
 }

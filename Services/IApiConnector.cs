@@ -8,6 +8,7 @@ namespace SellerApiOzon.Services
     {
         public void GetSkuFromOzon();
         public void GetAttributes();
+        public void UpdateStockForOzon();
 
     }
 }

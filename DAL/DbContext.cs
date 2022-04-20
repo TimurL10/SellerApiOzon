@@ -24,6 +24,7 @@ namespace SellerApiOzon.DAL
 
         }
 
+        // формирует json со списком товаров
         public string Dal_GetRemainsForPrices()
         {
 
@@ -91,6 +92,31 @@ namespace SellerApiOzon.DAL
                 connection.Close();
 
             }
+        }
+
+        public string Dal_UpdateStockForOzon()
+        {
+            string idsList = "";
+            using (IDbConnection connection = dbConnection)
+            {
+                IDataReader reader = null;
+
+                SqlCommand scCommand = new SqlCommand("UpdateStockForOzon", (SqlConnection)connection);
+                scCommand.CommandType = CommandType.StoredProcedure;
+                scCommand.CommandTimeout = 400;
+                SqlParameter parameter = new SqlParameter();
+                scCommand.Parameters.AddWithValue("@minPrice", 10000);
+                scCommand.Parameters.AddWithValue("@minRemain", 1);
+                connection.Open();
+                reader = scCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    idsList = (string)reader[0];
+                }
+                connection.Close();
+
+            }
+            return idsList;
         }
     }
 }
