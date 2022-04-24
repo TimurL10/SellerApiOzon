@@ -3,8 +3,10 @@ using SellerApiOzon.DAL;
 using SellerApiOzon.Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 
 namespace SellerApiOzon.Models
 {
@@ -94,6 +96,44 @@ namespace SellerApiOzon.Models
                 //string json = JsonConvert.SerializeObject(VendorCodes, Formatting.Indented);
                 var response = client.PostAsync(urlWorkEnv + "/v1/product/import/stocks", new StringContent(Stock, Encoding.UTF8, "application/json")).Result;
                 var result = response.Content.ReadAsStringAsync().Result;                
+
+            }
+        }
+
+        public void GetItemForOzon()
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("Client-Id", "344925");
+                client.DefaultRequestHeaders.Add("Api-Key", "44247e72-c8ce-4164-b67f-9e03a0319eb2");
+
+                var Items = _dbContext.Dal_GetItemsForOzon();
+
+
+                Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(Items);
+                int count = 0;
+                
+
+                while (myDeserializedClass.items.Count > 0)
+                {
+                    if (myDeserializedClass.items.Count < 99)
+                        count = myDeserializedClass.items.Count;
+                    else
+                        count = 99;
+                    var items100 = myDeserializedClass.items.GetRange(0, count);
+                    myDeserializedClass.items.RemoveRange(0, count);
+
+                    var items100Json = JsonConvert.SerializeObject(items100, Formatting.Indented);
+                    items100Json = string.Format("{{ \"{0}\": {1} }}", "items", items100Json);
+
+                    var response = client.PostAsync(urlWorkEnv + "/v2/product/import", new StringContent(items100Json, Encoding.UTF8, "application/json")).Result;
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    Debug.WriteLine(result);
+
+                    Thread.Sleep(1000);
+
+
+                }
 
             }
         }

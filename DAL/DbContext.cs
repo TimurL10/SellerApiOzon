@@ -9,6 +9,8 @@ namespace SellerApiOzon.DAL
 {
     class DbContext : IDbContext
     {
+        public int minRemains = 1;
+        public int minPrice = 10000;
         private string _configuration;
         public DbContext()
         {
@@ -37,8 +39,8 @@ namespace SellerApiOzon.DAL
                 scCommand.CommandType = CommandType.StoredProcedure;
                 scCommand.CommandTimeout = 400;
                 SqlParameter parameter = new SqlParameter();
-                scCommand.Parameters.AddWithValue("@minPrice", 10000);
-                scCommand.Parameters.AddWithValue("@minRemain", 1);
+                scCommand.Parameters.AddWithValue("@minPrice", minPrice);
+                scCommand.Parameters.AddWithValue("@minRemain", minRemains);
                 connection.Open();
                 reader = scCommand.ExecuteReader();
                 while (reader.Read())
@@ -63,8 +65,8 @@ namespace SellerApiOzon.DAL
                 scCommand.CommandType = CommandType.StoredProcedure;
                 scCommand.CommandTimeout = 400;
                 SqlParameter parameter = new SqlParameter();
-                scCommand.Parameters.AddWithValue("@minPrice", 10000);
-                scCommand.Parameters.AddWithValue("@minRemain", 1);
+                scCommand.Parameters.AddWithValue("@minPrice", minPrice);
+                scCommand.Parameters.AddWithValue("@minRemain", minRemains);
                 connection.Open();
                 reader = scCommand.ExecuteReader();
                 while (reader.Read())
@@ -105,8 +107,8 @@ namespace SellerApiOzon.DAL
                 scCommand.CommandType = CommandType.StoredProcedure;
                 scCommand.CommandTimeout = 400;
                 SqlParameter parameter = new SqlParameter();
-                scCommand.Parameters.AddWithValue("@minPrice", 10000);
-                scCommand.Parameters.AddWithValue("@minRemain", 1);
+                scCommand.Parameters.AddWithValue("@minPrice", minPrice);
+                scCommand.Parameters.AddWithValue("@minRemain", minRemains);
                 connection.Open();
                 reader = scCommand.ExecuteReader();
                 while (reader.Read())
@@ -117,6 +119,31 @@ namespace SellerApiOzon.DAL
 
             }
             return idsList;
+        }
+
+        public string Dal_GetItemsForOzon()
+        {
+            string itemsList = "";
+            using (IDbConnection connection = dbConnection)
+            {
+                IDataReader reader = null;
+
+                SqlCommand scCommand = new SqlCommand("GetItemsForOzon", (SqlConnection)connection);
+                scCommand.CommandType = CommandType.StoredProcedure;
+                scCommand.CommandTimeout = 400;
+                SqlParameter parameter = new SqlParameter();
+                scCommand.Parameters.AddWithValue("@minPrice", minPrice);
+                scCommand.Parameters.AddWithValue("@minRemain", minRemains);
+                connection.Open();
+                reader = scCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    itemsList = (string)reader[0];
+                }
+                connection.Close();
+
+            }
+            return itemsList;
         }
     }
 }
