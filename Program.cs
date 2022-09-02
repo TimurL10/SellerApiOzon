@@ -46,10 +46,11 @@ namespace SellerApiOzon
         public void Execute()
         {
 
-            // _apiConnector.GetAttributes();
+            // _apiConnector.GetAttributes(); 
             // _apiConnector.GetSkuFromOzon();
-            _apiConnector.GetItemForOzon(); //create items
-
+           // _apiConnector.GetItemForOzon(); //create items
+            _apiConnector.UpdateStockForOzon();
+            _apiConnector.UpdatePricesForOzon();
         }
     }
 

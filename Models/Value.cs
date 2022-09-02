@@ -22,7 +22,7 @@ namespace SellerApiOzon.Models
     {
         public List<Attribute> attributes { get; set; }
         public string barcode { get; set; }
-        public string category_id { get; set; }
+        public int category_id { get; set; }
         public int depth { get; set; }
         public string dimension_unit { get; set; }
         public int height { get; set; }

@@ -9,8 +9,8 @@ namespace SellerApiOzon.DAL
 {
     class DbContext : IDbContext
     {
-        public int minRemains = 1;
-        public int minPrice = 10000;
+        public int minRemains = 0;
+        public int minPrice = 5000;
         private string _configuration;
         public DbContext()
         {
@@ -53,6 +53,7 @@ namespace SellerApiOzon.DAL
             return idsList;
         }
 
+        // Забирает из Озон номера товаров Озон и номера товаров 7electro
         public string Dal_GetSkuFromOzon()
         {
 
@@ -79,6 +80,7 @@ namespace SellerApiOzon.DAL
             return idsList;
         }
 
+        // Сохраняет номера товаров Озон и номера товаров 7electro
         public void Dal_SaveSkuFromOzon(string skuList)
         {
             using (IDbConnection connection = dbConnection)
@@ -95,7 +97,7 @@ namespace SellerApiOzon.DAL
 
             }
         }
-
+        // Обновить остатки
         public string Dal_UpdateStockForOzon()
         {
             string idsList = "";
@@ -121,6 +123,7 @@ namespace SellerApiOzon.DAL
             return idsList;
         }
 
+        // Обновить список товаров на Озон
         public string Dal_GetItemsForOzon()
         {
             string itemsList = "";
@@ -144,6 +147,32 @@ namespace SellerApiOzon.DAL
 
             }
             return itemsList;
+        }
+
+        // Обновить список товаров на Озон
+        public string Dal_UpdatePricesForOzon()
+        {
+            string pricesList = "";
+            using (IDbConnection connection = dbConnection)
+            {
+                IDataReader reader = null;
+
+                SqlCommand scCommand = new SqlCommand("UpdatePricesForOzon", (SqlConnection)connection);
+                scCommand.CommandType = CommandType.StoredProcedure;
+                scCommand.CommandTimeout = 400;
+                SqlParameter parameter = new SqlParameter();
+                scCommand.Parameters.AddWithValue("@minPrice", minPrice);
+                scCommand.Parameters.AddWithValue("@minRemain", minRemains);
+                connection.Open();
+                reader = scCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    pricesList = (string)reader[0];
+                }
+                connection.Close();
+
+            }
+            return pricesList;
         }
     }
 }

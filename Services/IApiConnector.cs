@@ -10,6 +10,7 @@ namespace SellerApiOzon.Services
         public void GetAttributes();
         public void UpdateStockForOzon();
         public void GetItemForOzon();
+        public void UpdatePricesForOzon();
 
     }
 }

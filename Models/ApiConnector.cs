@@ -82,7 +82,7 @@ namespace SellerApiOzon.Models
 
             }
 
-        }
+        }        
 
         public void UpdateStockForOzon()
         {
@@ -96,6 +96,21 @@ namespace SellerApiOzon.Models
                 //string json = JsonConvert.SerializeObject(VendorCodes, Formatting.Indented);
                 var response = client.PostAsync(urlWorkEnv + "/v1/product/import/stocks", new StringContent(Stock, Encoding.UTF8, "application/json")).Result;
                 var result = response.Content.ReadAsStringAsync().Result;                
+
+            }
+        }
+
+        public void UpdatePricesForOzon()
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("Client-Id", "344925");
+                client.DefaultRequestHeaders.Add("Api-Key", "44247e72-c8ce-4164-b67f-9e03a0319eb2");
+
+                var Stock = _dbContext.Dal_UpdatePricesForOzon();   
+                //string json = JsonConvert.SerializeObject(VendorCodes, Formatting.Indented);
+                var response = client.PostAsync(urlWorkEnv + "/v1/product/import/prices", new StringContent(Stock, Encoding.UTF8, "application/json")).Result;
+                var result = response.Content.ReadAsStringAsync().Result;
 
             }
         }
@@ -131,7 +146,6 @@ namespace SellerApiOzon.Models
                     Debug.WriteLine(result);
 
                     Thread.Sleep(1000);
-
 
                 }
 
